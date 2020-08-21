@@ -1,8 +1,9 @@
+faker==1.0.7
+flake8==3.7.7
 flask==1.0.2
 flask-restplus==0.12.1
 flask-sqlalchemy==2.3.1
-pytest-flask==0.14.0
-faker==1.0.7
+psycopg2-binary==2.8.5
 pyjwt==1.7.1
-flake8==3.7.7
+pytest-flask==0.14.0
 Werkzeug==0.16.1

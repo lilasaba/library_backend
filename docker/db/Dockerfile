@@ -26,12 +26,15 @@ RUN apk add bash curl su-exec python3
 RUN apk add postgresql postgresql-contrib postgresql-dev
 RUN apk add python3-dev build-base linux-headers gcc libffi-dev
 
+
 # Adding our code
 WORKDIR /opt/code
 
 RUN mkdir -p /opt/code/db
+
 # Add postgres setup
 ADD ./docker/db/postgres-setup.sh /opt/code/db/
+RUN chmod 755 /opt/code/db/postgres-setup.sh
 RUN  /opt/code/db/postgres-setup.sh
 
 ## Install our code to prepare the DB
@@ -45,6 +48,8 @@ ADD ./library_backend/ /opt/code/
 ADD ./docker/db/* /opt/code/db/
 
 ## get the db ready
+RUN chmod 755 /opt/code/db/prepare_db.sh
+RUN chmod 755 /opt/code/db/start_postgres.sh
 RUN /opt/code/db/prepare_db.sh
 
 # Start the database in normal operation

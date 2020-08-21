@@ -1,6 +1,7 @@
 import os
-from pathlib import Path
+
 from flask_sqlalchemy import SQLAlchemy
+from pathlib import Path
 
 DATABASE_ENGINE = os.environ.get('DATABASE_ENGINE', 'SQLITE')
 
