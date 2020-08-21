@@ -38,17 +38,18 @@ def call_admin_add_book():
         book = {'title': fake.text(100),
                 'author': fake.text(40),
                 'publisher': fake.text(30),
-                'time_in': datetime.utcnow(),
+                #'time_in': datetime.utcnow(),
                 'year': 2000
         }
         print(book)
+        print(json.dumps(book))
         response = requests.post(f'{endpoint}/add_book/', data=book)
         #response = client.post('/api/me/books/', data=book,
-        #assert http.client.CREATED == response.status_code
+        assert http.client.CREATED == response.status_code
+        print(response.__dict__)
         result = eval(response.content)
         #result = response.json
         print(result)
-        print(response.__dict__)
         book_ids.append(result['id'])
 
 
@@ -59,7 +60,8 @@ def call_admin_add_book():
     #books = response.json
     for book in books:
         book_id = book['id']
-        url = f'/admin/books/{book_id}/'
+        url = f'/books/{book_id}/'
+        #url = f'/delete_book/{book_id}/'
         response = requests.delete(f'{endpoint}{url}')
         #response = client.delete(f'{endpoint}{url}')
         #response = client.delete(url)

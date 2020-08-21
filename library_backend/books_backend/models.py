@@ -10,11 +10,13 @@ class BookModel(db.Model):
     __tablename__ = 'book'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(450))
-    year = db.Column(db.Date)
+    year = db.Column(db.Integer)
+    # TODO: Date object is not JSON serializable.
+    #year = db.Column(db.Date)
     time_in = db.Column(db.DateTime, server_default=func.now())
     # TODO: make authors column a tuple.
     author_id = db.Column(db.ForeignKey('author.id'))
-    publisher_id = db.Column('publisher.id')
+    publisher_id = db.Column(db.ForeignKey('publisher.id'))
 
 
 class AuthorModel(db.Model):
@@ -27,3 +29,4 @@ class PublisherModel(db.Model):
     __tablename__ = 'publisher'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250))
+

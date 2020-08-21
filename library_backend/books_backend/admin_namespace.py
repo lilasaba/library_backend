@@ -1,6 +1,7 @@
 import http.client
+import json
 
-from datetime import datetime
+from datetime import date, datetime
 from flask_restplus import fields, Namespace, Resource
 from books_backend.models import AuthorModel, BookModel, PublisherModel
 from books_backend.db import db
@@ -13,8 +14,8 @@ book_parser.add_argument('title', type=str, required=True,
                           help='Title of the book')
 book_parser.add_argument('year', type=int, required=True,
                           help='Year of the book')
-book_parser.add_argument('time_in', type=str, required=True,
-                          help='Adding time of the book')
+#book_parser.add_argument('time_in', type=str, required=True,
+#                          help='Adding time of the book')
 book_parser.add_argument('author', type=str, required=True,
                           help='Author of the book')
 book_parser.add_argument('publisher', type=str, required=True,
@@ -29,10 +30,10 @@ model = {
     'title': fields.String(),
     'year': fields.Integer(),
     'time_in': fields.DateTime(),
-    'author': fields.String(),
-    'publisher_id': fields.String(),
+    'author_id': fields.Integer(),
+    'publisher_id': fields.Integer(),
 }
-#book_model = admin_namespace.model('Book', model)
+book_model = admin_namespace.model('Book', model)
 
 
 def get_name_id(name, name_type):
@@ -64,7 +65,7 @@ def get_name_id(name, name_type):
 class AddBook(Resource):
     @admin_namespace.doc('create_book')
     @admin_namespace.expect(book_parser)
-    #@admin_namespace.marshal_with(book_model, code=http.client.CREATED)
+    @admin_namespace.marshal_with(book_model, code=http.client.CREATED)
     def post(self):
         '''
         Create a new book.
@@ -79,16 +80,14 @@ class AddBook(Resource):
         publisher_id = get_name_id(publisher, 'publisher')
 
         new_book = BookModel(title=args['title'],
-                             time_in=args['time_in'],
-                             year=(year, 1, 1),
+                             year=year,
                              author_id=author_id,
                              publisher_id=publisher_id)
         db.session.add(new_book)
         db.session.flush()
         db.session.commit()
 
-        #result = api_namespace.marshal(new_book, book_model)
-        result = new_book
+        result = admin_namespace.marshal(new_book, book_model)
 
         return result, http.client.CREATED
 
@@ -97,7 +96,7 @@ class AddBook(Resource):
 class ListBooks(Resource):
 
     @admin_namespace.doc('list_books')
-    #@admin_namespace.marshal_with(book_model, as_list=True)
+    @admin_namespace.marshal_with(book_model, as_list=True)
     @admin_namespace.expect(search_parser)
     def get(self):
         '''
@@ -105,7 +104,7 @@ class ListBooks(Resource):
         '''
         args = search_parser.parse_args()
         search_param = args['search']
-        query = BookModel.query
+        query = db.session.query(BookModel)
         if search_param:
             param = f'%{search_param}%'
             query = (query.filter(BookModel.title.ilike(param)))
@@ -122,7 +121,7 @@ class ListBooks(Resource):
 class RetrieveBook(Resource):
 
     @admin_namespace.doc('retrieve_book')
-    #@admin_namespace.marshal_with(book_model)
+    @admin_namespace.marshal_with(book_model)
     def get(self, book_id):
         '''
         Retrieve a book by id.
@@ -135,7 +134,7 @@ class RetrieveBook(Resource):
         return book
 
 
-@admin_namespace.route('/delete_book/<int:book_id>/')
+@admin_namespace.route('/books/<int:book_id>/')
 class DeleteBook(Resource):
 
     @admin_namespace.doc('delete_book',
@@ -144,12 +143,12 @@ class DeleteBook(Resource):
         '''
         Delete a book.
         '''
-        book = BookModel.query.get(book_id)
+        book = db.session.query(BookModel).filter(BookModel.id==book_id)
         if not book:
             # The book is not present.
             return '', http.client.NO_CONTENT
 
-        db.session.delete(book)
+        db.session.query(BookModel).filter(BookModel.id==book_id).delete()
         db.session.commit()
 
         return '', http.client.NO_CONTENT
