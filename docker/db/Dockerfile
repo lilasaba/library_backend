@@ -50,6 +50,7 @@ ADD ./docker/db/* /opt/code/db/
 ## get the db ready
 RUN chmod 755 /opt/code/db/prepare_db.sh
 RUN chmod 755 /opt/code/db/start_postgres.sh
+RUN chmod 755 /opt/code/db/stop_postgres.sh
 RUN /opt/code/db/prepare_db.sh
 
 # Start the database in normal operation
