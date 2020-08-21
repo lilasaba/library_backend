@@ -14,10 +14,10 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
   - docker --version
   - docker-compose version
-  - echo "Login into Docker Hub"
-  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-  - export GIT_SHA=`git rev-parse --short HEAD`
-  - echo "Building commit $GIT_SHA"
+#  - echo "Login into Docker Hub"
+#  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+#  - export GIT_SHA=`git rev-parse --short HEAD`
+#  - echo "Building commit $GIT_SHA"
 
 jobs:
   include:
