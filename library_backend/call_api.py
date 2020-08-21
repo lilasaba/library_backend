@@ -1,5 +1,6 @@
 import http.client
 import json
+import random
 import requests
 import sys
 
@@ -14,17 +15,6 @@ from books_backend.app import create_app
 
 fake = Faker()
 endpoint = 'http://0.0.0.0:5030/admin'
-print('XXXXXXXXXXXXXXX')
-
-
-def app():
-    application = create_app()
-
-    application.app_context().push()
-    # Initialise the DB
-    application.db.create_all()
-
-    return application
 
 
 def call_admin_add_book():
@@ -32,26 +22,22 @@ def call_admin_add_book():
     Add books.
     '''
 
-    print('YYYYYYYYYYYYYYYYYYY')
     book_ids = []
     for _ in range(3):
         book = {'title': fake.text(100),
+                'book_count': random.randint(1, 10),
+                'year': 2000,
                 'author': fake.text(40),
                 'publisher': fake.text(30),
-                #'time_in': datetime.utcnow(),
-                'year': 2000
         }
         print(book)
         print(json.dumps(book))
         response = requests.post(f'{endpoint}/add_book/', data=book)
-        #response = client.post('/api/me/books/', data=book,
         assert http.client.CREATED == response.status_code
         print(response.__dict__)
         result = eval(response.content)
-        #result = response.json
         print(result)
         book_ids.append(result['id'])
-
 
     # Get and delete all books.
     response = requests.get(f'{endpoint}/books/')
@@ -61,12 +47,9 @@ def call_admin_add_book():
     for book in books:
         book_id = book['id']
         url = f'/books/{book_id}/'
-        #url = f'/delete_book/{book_id}/'
         response = requests.delete(f'{endpoint}{url}')
-        #response = client.delete(f'{endpoint}{url}')
-        #response = client.delete(url)
         print(response.__dict__)
-        #assert http.client.NO_CONTENT == response.status_code
+        assert http.client.NO_CONTENT == response.status_code
 
 
 if __name__ == '__main__':

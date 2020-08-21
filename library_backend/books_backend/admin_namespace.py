@@ -12,10 +12,10 @@ admin_namespace = Namespace('admin', description='Post and delete books.')
 book_parser = admin_namespace.parser()
 book_parser.add_argument('title', type=str, required=True,
                           help='Title of the book')
+book_parser.add_argument('book_count', type=int, required=True,
+                          help='Nr of books')
 book_parser.add_argument('year', type=int, required=True,
                           help='Year of the book')
-#book_parser.add_argument('time_in', type=str, required=True,
-#                          help='Adding time of the book')
 book_parser.add_argument('author', type=str, required=True,
                           help='Author of the book')
 book_parser.add_argument('publisher', type=str, required=True,
@@ -28,6 +28,7 @@ search_parser.add_argument('search', type=str, required=False,
 model = {
     'id': fields.Integer(),
     'title': fields.String(),
+    'book_count': fields.Integer(),
     'year': fields.Integer(),
     'time_in': fields.DateTime(),
     'author_id': fields.Integer(),
@@ -73,14 +74,14 @@ class AddBook(Resource):
         args = book_parser.parse_args()
         author = args['author']
         publisher = args['publisher']
-        year = args['year']
 
         # Get author- and publisher ids.
         author_id = get_name_id(author, 'author')
         publisher_id = get_name_id(publisher, 'publisher')
 
         new_book = BookModel(title=args['title'],
-                             year=year,
+                             book_count=args['book_count'],
+                             year=args['year'],
                              author_id=author_id,
                              publisher_id=publisher_id)
         db.session.add(new_book)

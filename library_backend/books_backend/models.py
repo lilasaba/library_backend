@@ -10,6 +10,7 @@ class BookModel(db.Model):
     __tablename__ = 'book'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(450))
+    book_count = db.Column(db.Integer)
     year = db.Column(db.Integer)
     # TODO: Date object is not JSON serializable.
     #year = db.Column(db.Date)
