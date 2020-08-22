@@ -41,4 +41,3 @@ if __name__ == '__main__':
         application.db.session.commit()
 
     application.db.session.close()
-

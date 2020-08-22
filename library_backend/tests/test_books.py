@@ -4,8 +4,6 @@ import random
 from faker import Faker
 from unittest.mock import ANY
 
-from .constants import PRIVATE_KEY
-
 fake = Faker()
 
 
@@ -28,7 +26,7 @@ def test_add_book(client):
                 'time_in': ANY,
                 'author_id': ANY,
                 'publisher_id': ANY,
-    }
+                }
     assert result == expected
 
 

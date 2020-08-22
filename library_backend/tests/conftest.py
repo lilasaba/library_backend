@@ -5,7 +5,6 @@ import random
 from faker import Faker
 
 from books_backend.app import create_app
-from .constants import PRIVATE_KEY
 
 fake = Faker()
 

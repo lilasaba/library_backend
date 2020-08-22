@@ -1,4 +1,4 @@
-from sqlalchemy import func, ForeignKey
+from sqlalchemy import func
 from books_backend.db import db
 
 
@@ -13,7 +13,7 @@ class BookModel(db.Model):
     book_count = db.Column(db.Integer)
     year = db.Column(db.Integer)
     # TODO: Date object is not JSON serializable.
-    #year = db.Column(db.Date)
+    # year = db.Column(db.Date)
     time_in = db.Column(db.DateTime, server_default=func.now())
     # TODO: make authors column a tuple.
     author_id = db.Column(db.ForeignKey('author.id'))
@@ -30,4 +30,3 @@ class PublisherModel(db.Model):
     __tablename__ = 'publisher'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250))
-

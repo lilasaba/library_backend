@@ -1,7 +1,5 @@
 import http.client
-import json
 
-from datetime import date, datetime
 from flask_restplus import fields, Namespace, Resource
 from books_backend.models import AuthorModel, BookModel, PublisherModel
 from books_backend.db import db
@@ -11,19 +9,19 @@ admin_namespace = Namespace('admin', description='Post and delete books.')
 # Book args.
 book_parser = admin_namespace.parser()
 book_parser.add_argument('title', type=str, required=True,
-                          help='Title of the book')
+                         help='Title of the book')
 book_parser.add_argument('book_count', type=int, required=True,
-                          help='Nr of books')
+                         help='Nr of books')
 book_parser.add_argument('year', type=int, required=True,
-                          help='Year of the book')
+                         help='Year of the book')
 book_parser.add_argument('author', type=str, required=True,
-                          help='Author of the book')
+                         help='Author of the book')
 book_parser.add_argument('publisher', type=str, required=True,
-                          help='Publisher of the book')
+                         help='Publisher of the book')
 # Search args.
 search_parser = admin_namespace.parser()
 search_parser.add_argument('search', type=str, required=False,
-                            help='Search in the titles of the books.')
+                           help='Search in the titles of the books.')
 
 model = {
     'id': fields.Integer(),
@@ -46,7 +44,7 @@ def get_name_id(name, name_type):
 
     try:
         entry_id = db.session.query(table_model)\
-                                   .filter(table_model.name==name).one().id
+                                   .filter(table_model.name == name).one().id
     except Exception as e:
         # TODO: log this.
         print(f'Exception {e} for {name} with {name_type}.')
@@ -144,12 +142,12 @@ class DeleteBook(Resource):
         '''
         Delete a book.
         '''
-        book = db.session.query(BookModel).filter(BookModel.id==book_id)
+        book = db.session.query(BookModel).filter(BookModel.id == book_id)
         if not book:
             # The book is not present.
             return '', http.client.NO_CONTENT
 
-        db.session.query(BookModel).filter(BookModel.id==book_id).delete()
+        db.session.query(BookModel).filter(BookModel.id == book_id).delete()
         db.session.commit()
 
         return '', http.client.NO_CONTENT
