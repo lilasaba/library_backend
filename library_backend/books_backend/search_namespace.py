@@ -1,10 +1,10 @@
+from flask import jsonify
 from flask_restplus import Namespace, Resource
 
-from books_backend.admin_namespace import book_model
 from books_backend.models import AuthorModel, BookModel, PublisherModel
 from books_backend.db import db
 
-search_namespace = Namespace('search', description='Post and delete books.')
+search_namespace = Namespace('search', description='Search books.')
 
 # Search args.
 search_parser = search_namespace.parser()
@@ -41,11 +41,44 @@ def get_name_id(name, name_type):
     return entry_id
 
 
+def id_to_name(eid, etype):
+    entry = None
+    if etype == 'author':
+        table_model = AuthorModel
+    elif etype == 'publisher':
+        table_model = PublisherModel
+
+    try:
+        entry = db.session.query(table_model)\
+                                 .filter(table_model.id == eid).one().name
+    except Exception as e:
+        # TODO: log this.
+        # print(f'Exception {e} for {name} with {name_type}.')
+        e = f'{e}'
+        pass
+
+    return entry
+
+
+def convert_book(book):
+    new_book = book.__dict__
+    author = id_to_name(new_book['author_id'], 'author')
+    publisher = id_to_name(new_book['publisher_id'], 'publisher')
+
+    new_book['author'] = author
+    new_book['publisher'] = publisher
+
+    del new_book['author_id']
+    del new_book['publisher_id']
+    del new_book['_sa_instance_state']
+
+    return new_book
+
+
 @search_namespace.route('/books/')
 class SearchBooks(Resource):
 
     @search_namespace.doc('search_books')
-    @search_namespace.marshal_with(book_model, as_list=True)
     @search_namespace.expect(search_parser)
     def get(self):
         '''
@@ -56,11 +89,12 @@ class SearchBooks(Resource):
         book_count_param = args['book_count']
         year_param = args['year']
         id_param = args['id']
-        # author_param = args['author']
-        # publisher_param = args['publisher']
+        author_param = args['author']
+        publisher_param = args['publisher']
         # TODO: add time_in.
 
         query = db.session.query(BookModel)
+        # TODO: enable combined searches; e.g. title and year.
         if title_param:
             param = f'%{title_param}%'
             query = (query.filter(BookModel.title.ilike(param)))
@@ -72,8 +106,15 @@ class SearchBooks(Resource):
             query = query.filter(BookModel.year == int(year_param))
         elif id_param:
             query = query.filter(BookModel.id == int(id_param))
+        elif author_param:
+            author_id = get_name_id(author_param, 'author')
+            query = query.filter(AuthorModel.id == int(author_id))
+        elif publisher_param:
+            publisher_id = get_name_id(publisher_param, 'publisher')
+            query = query.filter(AuthorModel.id == int(publisher_id))
 
         query = query.order_by('id')
         books = query.all()
+        converted_books = [convert_book(b) for b in books]
 
-        return books
+        return jsonify(converted_books)

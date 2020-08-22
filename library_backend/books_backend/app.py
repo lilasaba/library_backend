@@ -8,7 +8,7 @@ def create_app():
 
     application = Flask(__name__)
     api = Api(application, version='0.1', title='Books Backend API',
-              description='A Simple CRUD API')
+              description='An API to store books.')
 
     from books_backend.db import db, db_config
     application.config['RESTPLUS_MASK_SWAGGER'] = False
