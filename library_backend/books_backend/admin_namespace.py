@@ -48,6 +48,7 @@ def get_name_id(name, name_type):
     except Exception as e:
         # TODO: log this.
         # print(f'Exception {e} for {name} with {name_type}.')
+        e = f'{e}'
         pass
 
     if not entry_id:

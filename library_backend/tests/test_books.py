@@ -37,7 +37,7 @@ def test_list_books(client, book_fixture):
     assert http.client.OK == response.status_code
     assert len(result) > 0
 
-    # Check that the ids are increasing
+    # Check that the ids are increasing.
     previous_id = -1
     for book in result:
         expected = {'id': ANY,

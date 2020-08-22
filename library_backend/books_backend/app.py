@@ -4,6 +4,7 @@ from flask_restplus import Api
 
 def create_app():
     from books_backend.admin_namespace import admin_namespace
+    from books_backend.search_namespace import search_namespace
 
     application = Flask(__name__)
     api = Api(application, version='0.1', title='Books Backend API',
@@ -16,5 +17,6 @@ def create_app():
     application.db = db
 
     api.add_namespace(admin_namespace)
+    api.add_namespace(search_namespace)
 
     return application
