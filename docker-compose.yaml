@@ -43,7 +43,6 @@ services:
             context: .
         entrypoint: flake8
 
-
     db:
         build:
             context: .

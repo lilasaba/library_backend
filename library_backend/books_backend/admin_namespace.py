@@ -47,7 +47,8 @@ def get_name_id(name, name_type):
                                    .filter(table_model.name == name).one().id
     except Exception as e:
         # TODO: log this.
-        print(f'Exception {e} for {name} with {name_type}.')
+        # print(f'Exception {e} for {name} with {name_type}.')
+        pass
 
     if not entry_id:
         entry = table_model(name=name)
