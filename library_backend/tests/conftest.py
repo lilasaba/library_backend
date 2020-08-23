@@ -14,7 +14,7 @@ def app():
     application = create_app()
 
     application.app_context().push()
-    # Initialise the DB
+    # Initialise the DB.
     application.db.create_all()
 
     return application
@@ -41,11 +41,8 @@ def book_fixture(client):
 
     yield book_ids
 
-    # Delete all books.
-    response = client.get('/admin/books/')
-    books = response.json
-    for book in books:
-        book_id = book['id']
-        url = f'/admin/books/{book_id}/'
-        response = client.delete(url)
-        assert http.client.NO_CONTENT == response.status_code
+
+@pytest.fixture
+def delete_fixture(client):
+    response = client.delete('/admin/books/')
+    assert response.status_code == http.client.NO_CONTENT

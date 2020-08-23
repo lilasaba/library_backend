@@ -64,6 +64,9 @@ def get_name_id(name, name_type):
 
 @admin_namespace.route('/add_book/')
 class AddBook(Resource):
+    '''
+    TODO: handle duplicates.
+    '''
     @admin_namespace.doc('create_book')
     @admin_namespace.expect(book_parser)
     @admin_namespace.marshal_with(book_model, code=http.client.CREATED)
@@ -135,21 +138,19 @@ class RetrieveBook(Resource):
         return book
 
 
-@admin_namespace.route('/books/<int:book_id>/')
+@admin_namespace.route('/books/')
 class DeleteBook(Resource):
 
-    @admin_namespace.doc('delete_book',
+    @admin_namespace.doc('delete_all_data',
                          responses={http.client.NO_CONTENT: 'No content'})
-    def delete(self, book_id):
+    def delete(self):
         '''
-        Delete a book.
+        Delete all rows.
         '''
-        book = db.session.query(BookModel).filter(BookModel.id == book_id)
-        if not book:
-            # The book is not present.
-            return '', http.client.NO_CONTENT
-
-        db.session.query(BookModel).filter(BookModel.id == book_id).delete()
+        meta = db.metadata
+        for table in reversed(meta.sorted_tables):
+            print(f'Clear table {table}.')
+            db.session.execute(table.delete())
         db.session.commit()
 
         return '', http.client.NO_CONTENT

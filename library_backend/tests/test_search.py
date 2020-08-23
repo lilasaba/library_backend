@@ -7,7 +7,7 @@ from unittest.mock import ANY
 fake = Faker()
 
 
-def test_title_search(client):
+def test_title_search(client, delete_fixture):
     new_book = {'title': 'Another tale about a Platypus',
                 'book_count': random.randint(1, 10),
                 'year': 2000,
@@ -52,7 +52,7 @@ def test_id_search(client, book_fixture):
     assert 'author' in result
 
 
-def test_author_search(client):
+def test_author_search(client, delete_fixture):
     new_book = {'title': 'Some Title',
                 'book_count': random.randint(1, 10),
                 'year': 2000,

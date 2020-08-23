@@ -30,3 +30,45 @@ class PublisherModel(db.Model):
     __tablename__ = 'publisher'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250))
+
+
+class BooksPerAuthorModel(db.Model):
+    __tablename__ = 'books_per_author'
+    id = db.Column(db.Integer, primary_key=True)
+    author_id = db.Column(db.ForeignKey('author.id'))
+    book_count = db.Column(db.Integer)
+
+
+class BooksPerPublisherModel(db.Model):
+    __tablename__ = 'books_per_publisher'
+    id = db.Column(db.Integer, primary_key=True)
+    publisher_id = db.Column(db.ForeignKey('publisher.id'))
+    book_count = db.Column(db.Integer)
+
+
+class AverageAgeOfBooksModel(db.Model):
+    __tablename__ = 'average_age_of_books'
+    id = db.Column(db.Integer, primary_key=True)
+    book_id = db.Column(db.ForeignKey('book.id'))
+    age = db.Column(db.Integer)
+
+
+class OldestAndYoungestBookModel(db.Model):
+    __tablename__ = 'oldest_and_youngest_book'
+    id = db.Column(db.Integer, primary_key=True)
+    book_id = db.Column(db.ForeignKey('book.id'))
+    year = db.Column(db.Integer)
+
+
+class AverageTimeToLibraryPerAuthorModel(db.Model):
+    __tablename__ = 'average_time_to_library_per_author'
+    id = db.Column(db.Integer, primary_key=True)
+    author_id = db.Column(db.ForeignKey('author.id'))
+    time_to_lib = db.Column(db.Integer)
+
+
+class BookCountOfThirdBookPerAuthorModel(db.Model):
+    __tablename__ = 'book_count_of_third_book_per_author'
+    id = db.Column(db.Integer, primary_key=True)
+    author_id = db.Column(db.ForeignKey('author.id'))
+    book_count = db.Column(db.Integer)
