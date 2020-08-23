@@ -28,3 +28,11 @@ def test_book_count_per_author(client, delete_fixture):
     book_counts = get_books_per_entity(author, 'author')
     print(author, book_counts)
     assert book_counts == sum(range(5))
+
+
+def test_get_books_per_author(client, book_fixture):#, delete_fixture):
+    response = client.get('/stats/all_stats/')
+    # assert http.client.OK == response.status_code
+    print(response.__dict__)
+    result = response.json
+    print(result)

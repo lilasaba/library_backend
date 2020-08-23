@@ -62,7 +62,8 @@ def call_title_search():
     response = requests.post(f'{endpoint}/add_book/', data=new_book)
     assert http.client.CREATED == response.status_code
 
-    response = requests.get(f'{endpoint_search}/books/?title=platypus')
+    title = 'about a Platypus'
+    response = requests.get(f'{endpoint_search}/books/?title={title}')
     result = eval(response.content)
 
     assert http.client.OK == response.status_code

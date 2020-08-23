@@ -2,7 +2,7 @@
 
 # Book Library Backend
 
-Containerized Flask API served by PostgreSQL utilizing SQLAlchemy.
+Containerized Python Flask API served by PostgreSQL utilizing SQLAlchemy db toolkit.
 
 A book library application that stores books with the following attributes:
 
@@ -19,6 +19,10 @@ A book library application that stores books with the following attributes:
 
 Flask application in `library_backend/books_backend`.
 Details in [readme](library_backend/README.md).
+
+#### Testing
+
+`library_backend/tests` with pytest
 
 #### Docker
 
@@ -38,6 +42,11 @@ PostgreSQL
 
 `docker/db/Dockerfile`
 
+### CI
+
+Powered by `.travis.yml`: only build and test, deploy to dockerhub is in
+progress.
+
 ### Dependencies
 
 + Python 3.6+
@@ -47,6 +56,8 @@ PostgreSQL
 #### Tested with
 
 ```
+$ python --version
+Python 3.8.5
 $ docker --version
 Docker version 18.06.0-ce, build 0ffa825
 $ docker-compose --version
@@ -66,6 +77,10 @@ docker-compose run static-analysis
 docker-compose build server
 docker-compose run -p 127.0.0.1:8000:8000/tcp server
 ```
+
+### Documentation/Swagger
+
+Inspect in local browser at `127.0.0.1:8000`.
 
 ## Usage
 
@@ -167,7 +182,13 @@ print(response.status_code)
 
 ### Get book library statistics
 
-## Notes
+## References
 
-* unique constraints
++ [Hands-On-Docker-for-Microservices-with-Python](https://github.com/PacktPublishing/Hands-On-Docker-for-Microservices-with-Python)
+
+## TODO's/Notes
+
+* unique constraints missing: duplicate titles with different other column
+  values are possible
+* Statistics generation and tables are not finished :(
 * RabbitMQ

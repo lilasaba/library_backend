@@ -35,14 +35,14 @@ class PublisherModel(db.Model):
 class BooksPerAuthorModel(db.Model):
     __tablename__ = 'books_per_author'
     id = db.Column(db.Integer, primary_key=True)
-    author_id = db.Column(db.ForeignKey('author.id'))
+    entity_id = db.Column(db.ForeignKey('author.id'))
     book_count = db.Column(db.Integer)
 
 
 class BooksPerPublisherModel(db.Model):
     __tablename__ = 'books_per_publisher'
     id = db.Column(db.Integer, primary_key=True)
-    publisher_id = db.Column(db.ForeignKey('publisher.id'))
+    entity_id = db.Column(db.ForeignKey('publisher.id'))
     book_count = db.Column(db.Integer)
 
 
