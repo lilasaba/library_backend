@@ -162,6 +162,8 @@ print(len(added_books))
 #### By title
 
 ```
+import requests
+
 title = 'Some Title'
 response = requests.get(f'http://0.0.0.0:8000:search/books/?title={title}')
 print(response.content)
@@ -171,6 +173,8 @@ print(response.status_code)
 #### By author
 
 ```
+import requests
+
 author = 'Some Author'
 response = requests.get(f'http://0.0.0.0:8000:search/books/?author={author}')
 print(response.content)
@@ -180,7 +184,19 @@ print(response.status_code)
 #### By year
 #### By book_count
 
-### Get book library statistics
+### Get book library statistics (in stub)
+
+#### Stats for books per author
+
+```
+import requests
+
+response = requests.get(f'http://0.0.0.0:8000:stats/all_stats/')
+print(response.content)
+print(response.status_code)
+```
+
+Adds to table `books_per_author` as well.
 
 ## References
 
@@ -190,5 +206,5 @@ print(response.status_code)
 
 * unique constraints missing: duplicate titles with different other column
   values are possible
-* Statistics generation and tables are not finished :(
-* RabbitMQ
+* statistics generation and tables are not finished :(
+* RabbitMQ to queue requests when adding large data

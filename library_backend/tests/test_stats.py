@@ -30,9 +30,10 @@ def test_book_count_per_author(client, delete_fixture):
     assert book_counts == sum(range(5))
 
 
-def test_get_books_per_author(client, book_fixture):#, delete_fixture):
+def test_get_books_per_author(client, book_fixture):
     response = client.get('/stats/all_stats/')
-    # assert http.client.OK == response.status_code
+    assert http.client.OK == response.status_code
     print(response.__dict__)
     result = response.json
     print(result)
+    assert result['First Last'] == 10
